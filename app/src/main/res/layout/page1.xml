@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#555555">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="有没有感到你的生活毫无规划"
+        android:textColor="#ffffff"
+        android:textSize="20sp"
+        android:layout_marginTop="45dp"
+        android:id="@+id/textView"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="horizontal"
+        android:layout_marginBottom="18dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/linearLayout">
+        <RadioButton
+            android:checked="true"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignStart="@+id/textView"
+            android:layout_marginBottom="35dp"
+            android:id="@+id/radioButton"
+            android:layout_alignLeft="@+id/textView" />
+        <RadioButton
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/textView"
+        android:layout_marginStart="20dp"
+        android:layout_marginBottom="35dp"
+        android:id="@+id/radioButton1"
+            android:layout_alignLeft="@+id/textView"
+            android:layout_marginLeft="20dp" />
+        <RadioButton
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignStart="@+id/textView"
+            android:layout_marginStart="20dp"
+            android:layout_marginBottom="35dp"
+            android:id="@+id/radioButton2"
+            android:layout_alignLeft="@+id/textView"
+            android:layout_marginLeft="20dp" />
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/page1"
+        android:id="@+id/imageView"
+        android:layout_above="@+id/linearLayout"
+        android:layout_centerHorizontal="true" />
+
+</RelativeLayout>
