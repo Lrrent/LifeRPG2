@@ -5,10 +5,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.example.da.liferpg.database.DataBase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +32,8 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.welcome);
+        DataBase dataBase = new DataBase();
+        Log.i(dataBase.connect()+"", "onCreate: ");
         findAllView();
         initView();
     }

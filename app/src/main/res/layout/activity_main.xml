@@ -51,8 +51,8 @@
                 android:paddingLeft="50dp"
                 android:paddingRight="30dp">
                 <android.support.design.widget.TextInputLayout
-                    android:textColorHint="#c5c5c5"
                     android:layout_width="match_parent"
+                    android:id="@+id/userName"
                     android:layout_height="wrap_content">
                     <EditText
                         android:textSize="13sp"
@@ -62,7 +62,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="textPersonName"
-                        android:background="@drawable/selector_bg_edit"
                         android:textCursorDrawable="@drawable/bg_input_cursor"
                         android:paddingBottom="2dp"
                         />
@@ -79,6 +78,7 @@
                 <android.support.design.widget.TextInputLayout
                     android:textColorHint="#c5c5c5"
                     android:layout_width="match_parent"
+                    android:id="@+id/userPassword"
                     android:layout_height="wrap_content">
                     <EditText
                         android:textSize="13sp"

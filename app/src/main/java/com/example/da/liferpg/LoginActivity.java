@@ -2,6 +2,7 @@ package com.example.da.liferpg;
 
 import android.app.ActivityOptions;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
@@ -10,13 +11,15 @@ import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.transition.Explode;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-
+import android.widget.Toast;
 
 import com.example.da.liferpg.database.DataBase;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 
 public class LoginActivity extends AppCompatActivity {
@@ -32,8 +35,6 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         findAllView();
-        DataBase dataBase = new DataBase();
-        Log.i(dataBase.connect()+"", "onCreate: ");
         addChange.setOnClickListener(new myClickListener());
         login.setOnClickListener(new myClickListener());
     }
@@ -41,32 +42,102 @@ public class LoginActivity extends AppCompatActivity {
         addChange = (FloatingActionButton) findViewById(R.id.fab);
         login = (Button) findViewById(R.id.login);
         cv = (CardView) findViewById(R.id.cv);
+        userName = (EditText) findViewById(R.id.et_username);
+        userPassword = (EditText) findViewById(R.id.et_password);
     }
-    class myClickListener implements View.OnClickListener {   //
+    class DBAsyncTask extends AsyncTask<String,Integer,String>{  //·ÃÎÊÍâ²¿Êı¾İ¿âÉæ¼°ÁªÍø,ËùÒÔ±ØĞëÔÚÁíÒ»¸öÏß³ÌÖĞÖ´ĞĞ
+        @Override
+        protected String doInBackground(String... params) {
+            String name = params[0];
+            String password = params[1];
+            DataBase dataBase = new DataBase();  //Á¬½Óµ½Êı¾İ¿âÖĞ
+            dataBase.connect();
+            /*-------------------- ¼ì²éÕËºÅºÍÃÜÂëÊÇ·ñÕıÈ·------------------------*/
+            try {
+                boolean exited = dataBase.QueryExisted(name);
+                if (!exited){   //²»´æÔÚÓÃ»§Ãû
+                    return "notExited";
+                }
+                else{
+                    ResultSet rs = dataBase.Query("select * from user where userName='"+name+"';");
+                    while (rs.next()){
+                        //Log.i(rs.getString("userId"), "doInBackground: ");
+                        String nameDB = rs.getString("userName");
+                        String passwordDB =rs.getString("userPassword");
+                        if (name.equals(nameDB) && password.equals(passwordDB)){ //¿ÉÒÔµÇÂ¼
+                            return "logined";
+                        }
+                        else if (!password.equals(passwordDB)){ //ÃÜÂë´íÎó
+                            return "wrongPassword";
+                        }
+                    }
+                    dataBase.disConnect();   //¶Ï¿ªÊı¾İ¿âÁ¬½Ó
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+        @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+        @Override
+        protected void onPostExecute(String s) {
+            //super.onPostExecute(s);
+            if (s.equals("notExited")){ //ÓÃ»§Ãû²»´æÔÚ
+                Toast.makeText(getApplicationContext(),"ÓÃ»§²»´æÔÚ",Toast.LENGTH_LONG).show();
+
+               // SnackbarUtil.LongSnackbar(userName,"ÓÃ»§Ãû²»´æÔÚ",0xff2195f3,0xffffffff).show();
+            }
+            else if (s.equals("wrongPassword")){
+                userPassword.setError("ÃÜÂë´íÎó");
+            }
+            else if (s.equals("logined")){ //ÔÊĞíµÇÂ½
+                Explode explode = new Explode();
+                explode.setDuration(500);
+                getWindow().setExitTransition(explode);
+                getWindow().setEnterTransition(explode);
+                ActivityOptionsCompat oc2 = ActivityOptionsCompat.makeSceneTransitionAnimation(LoginActivity.this);
+                Intent i2 = new Intent(LoginActivity.this,LoginSuccessActivity.class);
+                startActivity(i2, oc2.toBundle());
+            }
+        }
+    }
+    class myClickListener implements View.OnClickListener {   //°´Å¥µÄ¼àÌıÊÂ¼ş
         @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
         @Override
         public void onClick(View view) {
             switch (view.getId()) {
-                case R.id.fab:   //è½¬æ¢åˆ°æ³¨å†Œç•Œé¢
-                    getWindow().setExitTransition(null);
-                    getWindow().setEnterTransition(null);
-                 //   if (Build >= Build.VERSION_CODES.LOLLIPOP) {
+                case R.id.fab:   //×ª»»µ½×¢²á½çÃæ
+                        getWindow().setExitTransition(null);
+                        getWindow().setEnterTransition(null);
                         ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(LoginActivity.this, addChange, view.getTransitionName());
                         startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
-                   // } else {
-                    //    startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
-                   // }
                     break;
                 case R.id.login:
-                    Explode explode = new Explode();
-                    explode.setDuration(500);
-                    getWindow().setExitTransition(explode);
-                    getWindow().setEnterTransition(explode);
-                    ActivityOptionsCompat oc2 = ActivityOptionsCompat.makeSceneTransitionAnimation(LoginActivity.this);
-                    Intent i2 = new Intent(LoginActivity.this,LoginSuccessActivity.class);
-                    startActivity(i2, oc2.toBundle());
+                        String name = userName.getText().toString();
+                        String password = userPassword.getText().toString();
+                        if(checkInput(name,password)){ //µ±ÊäÈë²»Îª¿Õ
+                            //ĞèÒª·ÃÎÊµ«Êı¾İ¿â,ËùÒÔÊ¹ÓÃĞÂ½¨Ò»¸öÏß³Ì
+                             checkedInsert(name,password);  //ÅĞ¶ÏÊÇ·ñÄÜ¹»²åÈëÊı¾İ¿â,Èç¿ÉÒÔ,²åÈëÊı¾İ¿âÖĞÖ®ºó¾Í¿ÉÒÔÌø×ªµ½Ö÷½çÃæ
+                        }
                     break;
             }
+        }
+        private boolean checkedInsert(String name, String password){ //ÕâÀï·ÃÎÊÊı¾İ¿â,Í¬Ê±¼ì²éÃÜÂëºÍÓÃ»§ÃûÊÇ·ñÕıÈ·
+            boolean inserted = true;
+            new DBAsyncTask().execute(name,password);
+            return inserted;
+        }
+        private boolean checkInput(String name,String password){ //¼ì²éÊäÈëÊÇ·ñÕıÈ·(Îª¿Õ)
+            boolean checked = true;
+            if (name.equals("")){ //ÓÃ»§ÃûÎª¿ÕÊ±
+                userName.setError("ÓÃ»§ÃûÎª¿Õ");
+                checked = false;
+            }
+            if (password.equals("")){ //ÃÜÂëÎª¿Õ
+                userPassword.setError("ÃÜÂë²»ÄÜÎª¿Õ");
+                checked = false;
+            }
+            return checked;
         }
     }
 }

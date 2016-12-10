@@ -3,6 +3,8 @@ package com.example.da.liferpg;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
@@ -10,72 +12,130 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.CardView;
 import android.transition.Transition;
 import android.transition.TransitionInflater;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.animation.AccelerateInterpolator;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import com.example.da.liferpg.database.DataBase;
+
+import java.sql.SQLException;
 
 
 public class RegisterActivity extends Activity {
 
     FloatingActionButton fab;
     CardView cvAdd;
-
+    private EditText userName;
+    private EditText userPassword;
+    private EditText repeatPassword;
+    private Button register;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-        fab = (FloatingActionButton) findViewById(R.id.fab);
-        cvAdd = (CardView) findViewById(R.id.cv_add);
-        // ButterKnife.inject(this);
-
+        findAllView();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             ShowEnterAnimation();
         }
         fab.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
-            public void onClick(View v) {
-                animateRevealClose();
-            }
+            public void onClick(View v) {animateRevealClose();}
         });
+        register.setOnClickListener(new registerListener());
     }
-
+    //register按钮的监控器
+    class registerListener implements View.OnClickListener{
+        @Override
+        public void onClick(View v) {
+            String name = userName.getText().toString();
+            String password = userPassword.getText().toString();
+            String repeatPass = repeatPassword.getText().toString();
+            if(checkInput(name,password,repeatPass)){ //输入没问题，可以考虑插入,但还要检查是否已经存在用户名
+                checkInsert(name,password);  //检查并且查看用户名是否重复,是否可以插入数据库,创建新线程
+            }
+        }
+        private boolean checkInput(String name,String password,String repeatPass){
+            boolean checked = true;
+            if (name.equals("")){userName.setError("用户名为空");checked = false;}
+            if (password.equals("")){userPassword.setError("密码为空"); checked = false;}
+            if (repeatPass.equals("")){repeatPassword.setError("请再次输入密码"); checked = false;}
+            if (checked == true && !password.equals(repeatPass)){
+                Toast.makeText(getApplicationContext(),"两次输入密码不一致",Toast.LENGTH_LONG).show(); checked = false;}
+            return checked;
+        }
+        private void checkInsert(String name,String password){
+            new DBAsyncTask().execute(name,password);
+        }
+    }
+    //新建线程,访问数据库,
+    class DBAsyncTask extends AsyncTask<String,Integer,String>{
+        @Override
+        protected String doInBackground(String... params) { //新线程,访问数据库
+            String name = params[0];
+            String password = params[1];
+            DataBase database = new DataBase();
+            database.connect();
+            try {
+               // Log.i(name, "doInBackground: ");
+                boolean isExisted = database.QueryExisted(name);  //判断用户名是否已经存在
+                if (isExisted){ //用户名已经存在
+                    return "existed";
+                }
+                else{ //可以注册,将用户名和密码数据插入user表格中,然后通知UI可以登录
+                    String sql = "INSERT INTO `user` (`userId`, `userName`, `userPassword`) VALUES (NULL, '"+name+"', '"+password+"');";
+                   // Log.i(sql, "doInBackground: ");
+                    database.Insert(sql);
+                    return "register";
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+        @Override
+        protected void onPostExecute(String s) { //对控件进行处理
+            Log.i(s, "onPostExecute: ");
+            if (s.equals("existed")){
+                Toast.makeText(getApplicationContext(),"用户名已经存在",Toast.LENGTH_LONG).show();
+            }
+            else if (s.equals("register")){ //注册成功,跳转回登陆界面
+                Intent intent = new Intent(RegisterActivity.this,LoginActivity.class);
+                RegisterActivity.this.finish();
+                startActivity(intent);
+            }
+        }
+    }
+    private void findAllView(){
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+        cvAdd = (CardView) findViewById(R.id.cv_add);
+        userName = (EditText) findViewById(R.id.et_username);
+        userPassword = (EditText) findViewById(R.id.et_password);
+        repeatPassword = (EditText) findViewById(R.id.et_repeatpassword);
+        register = (Button) findViewById(R.id.register);
+    }
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void ShowEnterAnimation() {
         Transition transition = TransitionInflater.from(this).inflateTransition(R.transition.fabtransition);
         getWindow().setSharedElementEnterTransition(transition);
-
         transition.addListener(new Transition.TransitionListener() {
             @Override
             public void onTransitionStart(Transition transition) {
                 cvAdd.setVisibility(View.GONE);
             }
-
             @Override
-            public void onTransitionEnd(Transition transition) {
-                transition.removeListener(this);
-                animateRevealShow();
-            }
-
+            public void onTransitionEnd(Transition transition) {}
             @Override
-            public void onTransitionCancel(Transition transition) {
-
-            }
-
+            public void onTransitionCancel(Transition transition) {}
             @Override
-            public void onTransitionPause(Transition transition) {
-
-            }
-
+            public void onTransitionPause(Transition transition) {}
             @Override
-            public void onTransitionResume(Transition transition) {
-
-            }
-
-
-        });
+            public void onTransitionResume(Transition transition) {}});
     }
-
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void animateRevealShow() {
         Animator mAnimator = ViewAnimationUtils.createCircularReveal(cvAdd, cvAdd.getWidth()/2,0, fab.getWidth() / 2, cvAdd.getHeight());

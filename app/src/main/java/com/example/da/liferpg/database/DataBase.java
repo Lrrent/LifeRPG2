@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 //连接外部数据库
+//必须要在不同于ui进程的进程中进行
 /**
  * Created by Da on 2016/12/4.
  */
@@ -24,7 +25,7 @@ public class DataBase{
     }*/
     public void Database(){};
     public static boolean connect(){ //连接数据库
-        String connectS = "jdbc:mysql://583aaeb73756c.gz.cdb.myqcloud.com:10761/test"
+        String connectS = "jdbc:mysql://5848e2053c8ed.gz.cdb.myqcloud.com:14242/RPG"
                 +"?autoReconnect=true&useUnicode=true"
                 +"&characterEncoding=UTF-8&useSSL=false";
         try{
