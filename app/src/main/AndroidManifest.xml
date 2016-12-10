@@ -9,7 +9,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity"
-            android:noHistory="false">
+            android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -19,8 +19,9 @@
         <activity android:name=".RegisterActivity" />
         <activity android:name=".LoginSuccessActivity"> </activity>
         <activity android:name=".LoginActivity"
-            android:noHistory="false"><!-- -->
-
-        </activity>
+            android:noHistory="true"><!-- --> </activity>
+        <activity android:name=".CopyRight"> </activity>
+        <activity android:name=".main_window"> </activity>
+        <activity android:name=".add_task"> </activity>
     </application>
 </manifest>

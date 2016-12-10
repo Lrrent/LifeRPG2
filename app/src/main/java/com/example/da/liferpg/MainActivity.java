@@ -19,15 +19,15 @@ import java.util.List;
 public class MainActivity extends Activity {
     private ViewPager myViewPager;
 
-    // è¦ä½¿ç”¨çš„ViewPager
+    // ÒªÊ¹ÓÃµÄViewPager
     private View page1, page2, page3,page4;
-    // ViewPageråŒ…å«çš„é¡µé¢
+    // ViewPager°üº¬µÄÒ³Ãæ
     private List<View> pageList;
-    // View     PageråŒ…å«çš„é¡µé¢åˆ—è¡¨ï¼Œä¸€èˆ¬ç»™adapterä¼ çš„æ˜¯ä¸€ä¸ªlist
+    // View     Pager°üº¬µÄÒ³ÃæÁĞ±í£¬Ò»°ã¸øadapter´«µÄÊÇÒ»¸ölist
     private MyPagerAdapter myPagerAdapter;
     private TextView te;
     private Intent intent;
-    // é€‚é…å™¨
+    // ÊÊÅäÆ÷
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,20 +64,19 @@ public class MainActivity extends Activity {
         }
         @Override
         public int getCount() {
-            // TODO Auto-generated method stub
-            // è¿”å›è¦å±•ç¤ºçš„å›¾ç‰‡æ•°é‡
+            // ·µ»ØÒªÕ¹Ê¾µÄÍ¼Æ¬ÊıÁ¿
             return pageList.size();
         }
         @Override
         public boolean isViewFromObject(View arg0, Object arg1) {
             // TODO Auto-generated method stub
-            // åˆšå¼€å§‹ç”¨viewpagerå°±ç›´æ¥å†™â€œreturn arg0 == arg1;â€å°±å¥½å•¦
+            // ¸Õ¿ªÊ¼ÓÃviewpager¾ÍÖ±½ÓĞ´¡°return arg0 == arg1;¡±¾ÍºÃÀ²
             return arg0 == arg1;
         }
         @Override
         public void destroyItem(ViewGroup container, int position, Object object) {
             // TODO Auto-generated method stub
-            // å°†å½“å‰ä½ç½®çš„Viewç§»é™¤
+            // ½«µ±Ç°Î»ÖÃµÄViewÒÆ³ı
             container.removeView(pageList.get(position));
         }
         @Override

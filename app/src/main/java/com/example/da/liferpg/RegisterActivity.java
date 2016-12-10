@@ -44,7 +44,7 @@ public class RegisterActivity extends Activity {
         fab.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
-            public void onClick(View v) {animateRevealClose();}
+            public void onClick(View v) {animateRevealClose();startActivity(new Intent(RegisterActivity.this, LoginActivity.class));}
         });
         register.setOnClickListener(new registerListener());
     }

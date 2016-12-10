@@ -41,7 +41,7 @@ public class DataBase{
     public static void disConnect() throws SQLException {   //关闭数据库连接
         conn.close();
     }
-    public ResultSet Query(String sqlSentence) {  //查询,传入特定的sql select语句,返回resultset结果集
+    public static ResultSet Query(String sqlSentence) {  //查询,传入特定的sql select语句,返回resultset结果集
         Statement stat;
         ResultSet rs= null;
         try{
@@ -52,7 +52,7 @@ public class DataBase{
         }
         return rs;
     }
-    public boolean QueryExisted(String userName) throws SQLException {  //查询注册用户名是否已经存在,返回true或者false
+    public static boolean QueryExisted(String userName) throws SQLException {  //查询注册用户名是否已经存在,返回true或者false
         Statement stat;
         ResultSet rs= null;
         try{
@@ -66,7 +66,7 @@ public class DataBase{
         else
             return false;
     }
-    public int Insert(String sqlSentence) {  //插入,同样传入sql insert语句,将数据插入特定的表格
+    public static int Insert(String sqlSentence) {  //插入,同样传入sql insert语句,将数据插入特定的表格
         Statement stat;
         int insertResult= 0;
         try{
@@ -77,7 +77,7 @@ public class DataBase{
         }
         return insertResult;
     }
-    public int Delete(String sqlSentence) {  //插入,同样传入sql insert语句,将数据插入特定的表格
+    public static int Delete(String sqlSentence) {  //插入,同样传入sql insert语句,将数据插入特定的表格
         Statement stat;
         int deleteResult= 0;
         try{
@@ -88,7 +88,7 @@ public class DataBase{
         }
         return deleteResult;
     }
-    public int Update(String sqlSentence) {  //插入,同样传入sql insert语句,将数据插入特定的表格
+    public static int Update(String sqlSentence) {  //插入,同样传入sql insert语句,将数据插入特定的表格
         Statement stat;
         int updateResult= 0;
         try{

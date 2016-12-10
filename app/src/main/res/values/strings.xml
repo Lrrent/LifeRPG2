@@ -9,4 +9,7 @@
     <string name="repeat_password">确认密码</string>
     <string name="next">注册</string>
     <string name="register">注册</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
 </resources>
