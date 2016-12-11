@@ -109,8 +109,13 @@ public class LoginActivity extends AppCompatActivity {
                 case R.id.fab:   //转换到注册界面
                         getWindow().setExitTransition(null);
                         getWindow().setEnterTransition(null);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(LoginActivity.this, addChange, view.getTransitionName());
                         startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
+                    }
+                    else{
+                        startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
+                    }
                     break;
                 case R.id.login:
                         String name = userName.getText().toString();

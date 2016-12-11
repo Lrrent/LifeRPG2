@@ -169,7 +169,6 @@ public class RegisterActivity extends Activity {
                 fab.setImageResource(android.R.drawable.btn_plus);
                 RegisterActivity.super.onBackPressed();
             }
-
             @Override
             public void onAnimationStart(Animator animation) {
                 super.onAnimationStart(animation);

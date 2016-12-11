@@ -32,18 +32,63 @@
             app:layout_scrollFlags="scroll|enterAlways">
         </android.support.design.widget.TabLayout>
     </android.support.design.widget.AppBarLayout>
-
     <android.support.v4.view.ViewPager
         android:id="@+id/main_viewpager"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/main_floating_button"
+    <FrameLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom"
-        android:layout_margin="35dp"
-        app:rippleColor="#ff8b8b"
-        app:fabSize="normal"/>
+        android:layout_height="300dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_gravity="end|bottom">
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/button1"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="200dp"
+            app:backgroundTint="@color/floatingButton"
+            android:layout_gravity="center_horizontal"
+            app:rippleColor="@color/cardview_light_background"/>
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/button2"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="200dp"
+            app:backgroundTint="@color/floatingButton"
+            app:rippleColor="@color/cardview_light_background"
+            android:layout_gravity="center_horizontal"/>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/button3"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="200dp"
+            android:src="@color/floatingButton"
+            app:backgroundTint="@color/floatingButton"
+            app:rippleColor="@color/cardview_light_background"
+            android:layout_gravity="center_horizontal"/>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/mainButton"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="200dp"
+            android:src="@mipmap/float_add"
+            app:backgroundTint="@color/floatingButton"
+            app:rippleColor="@color/cardview_light_background"
+            android:layout_gravity="center_horizontal"/>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/button4"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="200dp"
+            android:layout_gravity="center_horizontal"
+            app:backgroundTint="@color/floatingButton"
+            app:rippleColor="@color/cardview_light_background"/>
+
+    </FrameLayout>
 </android.support.design.widget.CoordinatorLayout>
