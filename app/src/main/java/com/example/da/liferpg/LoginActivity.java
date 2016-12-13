@@ -67,7 +67,7 @@ public class LoginActivity extends AppCompatActivity {
                         String nameDB = rs.getString("userName");
                         String passwordDB =rs.getString("userPassword");
                         if (name.equals(nameDB) && password.equals(passwordDB)){ //可以登录
-                            return "logined";
+                            return "logined,"+name+","+password;
                         }
                         else if (!password.equals(passwordDB)){ //密码错误
                             return "wrongPassword";
@@ -92,11 +92,13 @@ public class LoginActivity extends AppCompatActivity {
             else if (s.equals("wrongPassword")){
                 userPassword.setError("密码错误");
             }
-            else if (s.equals("logined")){ //允许登陆
+            else if (s.split(",")[0].equals("logined")){ //允许登陆
                 LoginedJudg = getSharedPreferences("user",MODE_PRIVATE);  //可以登录之后想sharepreference中写入数据,下次就不需要再登陆
                 SharedPreferences.Editor editor = LoginedJudg.edit();
                 String loginFlag = "logined";
                 editor.putString("logined",loginFlag);
+                editor.putString("userName",s.split(",")[1]);
+                editor.putString("userPassword",s.split(",")[2]);
                 editor.commit();
                 Explode explode = new Explode();
                 explode.setDuration(500);

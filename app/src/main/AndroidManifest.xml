@@ -17,7 +17,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".RegisterActivity" />
-        <activity android:name=".LoginSuccessActivity"> </activity>
         <activity android:name=".LoginActivity"
             android:noHistory="true"><!-- --> </activity>
         <activity android:name=".CopyRight"> </activity>

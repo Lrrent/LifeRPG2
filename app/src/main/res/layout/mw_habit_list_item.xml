@@ -10,7 +10,7 @@
         android:layout_height="match_parent"
         android:background="@color/cardview_light_background"
         android:layout_marginRight="20dp"
-        android:src="@mipmap/float_add"
+        android:src="@drawable/float_add"
         />
     <TextView
         android:id="@+id/habit_str"
