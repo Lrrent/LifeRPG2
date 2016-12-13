@@ -2,16 +2,14 @@ package com.example.da.liferpg;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
-import com.example.da.liferpg.database.DataBase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,15 +25,24 @@ public class MainActivity extends Activity {
     private MyPagerAdapter myPagerAdapter;
     private TextView te;
     private Intent intent;
+    SharedPreferences loginJudge;  //判断之前是否登陆过
     // 适配器
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.welcome);
-        DataBase dataBase = new DataBase();
-        Log.i(dataBase.connect()+"", "onCreate: ");
-        findAllView();
-        initView();
+        loginJudge = getSharedPreferences("user",MODE_PRIVATE); //从sharepreference中取出登陆信息
+        String logined = loginJudge.getString("logined","noLogined"); //默认没有登陆
+       // Log.d("flag",logined);
+        if(logined.equals("logined")){
+            //Log.d("ahah","haha");
+            intent = new Intent(MainActivity.this,main_window.class);
+            startActivity(intent);
+        }
+        else{
+            setContentView(R.layout.welcome);
+            findAllView();
+            initView();
+        }
     }
     private void findAllView(){
         myViewPager = (ViewPager) findViewById(R.id.myViewPager);

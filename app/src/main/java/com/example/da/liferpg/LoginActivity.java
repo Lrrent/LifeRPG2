@@ -2,6 +2,7 @@ package com.example.da.liferpg;
 
 import android.app.ActivityOptions;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -29,6 +30,7 @@ public class LoginActivity extends AppCompatActivity {
     Button login;
     CardView cv;
     FloatingActionButton addChange;
+    SharedPreferences LoginedJudg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +93,11 @@ public class LoginActivity extends AppCompatActivity {
                 userPassword.setError("密码错误");
             }
             else if (s.equals("logined")){ //允许登陆
+                LoginedJudg = getSharedPreferences("user",MODE_PRIVATE);  //可以登录之后想sharepreference中写入数据,下次就不需要再登陆
+                SharedPreferences.Editor editor = LoginedJudg.edit();
+                String loginFlag = "logined";
+                editor.putString("logined",loginFlag);
+                editor.commit();
                 Explode explode = new Explode();
                 explode.setDuration(500);
                 getWindow().setExitTransition(explode);
