@@ -4,7 +4,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/> <!-- 一定不要忘记了要访问数据库就要联网-->
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/our_logo"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -23,5 +23,6 @@
         <activity android:name=".CopyRight"> </activity>
         <activity android:name=".main_window"> </activity>
         <activity android:name=".add_task"> </activity>
+        <receiver android:name=".static_broadcast"/>
     </application>
 </manifest>

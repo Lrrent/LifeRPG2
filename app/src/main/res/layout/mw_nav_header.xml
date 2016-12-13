@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:background="@color/colorAccent"
+    android:background="@mipmap/test2"
     android:layout_height="160dp"
     android:padding="20dp"
     android:gravity="bottom">
@@ -14,5 +14,6 @@
         android:id="@+id/nav_user"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColor="#FFFFFF"
         android:text="LifeRPG"/>
 </LinearLayout>

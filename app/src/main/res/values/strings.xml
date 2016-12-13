@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">RPG</string>
+    <string name="app_name">LifeRPG</string>
     <string name="login_success">login success</string>
     <string name="login">登陆</string>
     <string name="Username">用户名</string>
