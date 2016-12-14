@@ -88,8 +88,10 @@ public class RegisterActivity extends Activity {
                 }
                 else{ //可以注册,将用户名和密码数据插入user表格中,然后通知UI可以登录
                     String sql = "INSERT INTO `user` (`userId`, `userName`, `userPassword`) VALUES (NULL, '"+name+"', '"+password+"');";
-                   // Log.i(sql, "doInBackground: ");
+                    String rankingSql = "INSERT INTO `ranking` (`userName`, `completeRateDaily`, `completeRateDDL`) VALUES ('"+name+"',0,0);";
+                    Log.i(rankingSql, "doInBackground: ");
                     database.Insert(sql);
+                    database.Insert(rankingSql);
                     return "register";
                 }
             } catch (SQLException e) {
