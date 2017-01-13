@@ -9,8 +9,8 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-//è¿æ¥å¤–éƒ¨æ•°æ®åº“
-//å¿…é¡»è¦åœ¨ä¸åŒäºuiè¿›ç¨‹çš„è¿›ç¨‹ä¸­è¿›è¡Œ
+//Á¬½ÓÍâ²¿Êı¾İ¿â
+//±ØĞëÒªÔÚ²»Í¬ÓÚui½ø³ÌµÄ½ø³ÌÖĞ½øĞĞ
 /**
  * Created by Da on 2016/12/4.
  */
@@ -24,13 +24,13 @@ public class DataBase{
         db.Update("create table a(name int(8));");
     }*/
     public void Database(){};
-    public static boolean connect(){ //è¿æ¥æ•°æ®åº“
-        String connectS = "jdbc:mysql://5848e2053c8ed.gz.cdb.myqcloud.com:14242/RPG"
+    public static boolean connect(){ //Á¬½ÓÊı¾İ¿â
+        String connectS = "jdbc:mysql://5878521d3d3fe.gz.cdb.myqcloud.com:17078/LifeRPG"
                 +"?autoReconnect=true&useUnicode=true"
                 +"&characterEncoding=UTF-8&useSSL=false";
         try{
             Class.forName("com.mysql.jdbc.Driver");
-            conn= DriverManager.getConnection(connectS, "root", "dada1996");
+            conn= DriverManager.getConnection(connectS, "root", "llq123456");
             return true;
         }
         catch(Exception e){
@@ -38,62 +38,62 @@ public class DataBase{
         }
         return false;
     }
-    public static void disConnect() throws SQLException {   //å…³é—­æ•°æ®åº“è¿æ¥
+    public static void disConnect() throws SQLException {   //¹Ø±ÕÊı¾İ¿âÁ¬½Ó
         conn.close();
     }
-    public static ResultSet Query(String sqlSentence) {  //æŸ¥è¯¢,ä¼ å…¥ç‰¹å®šçš„sql selectè¯­å¥,è¿”å›resultsetç»“æœé›†
+    public static ResultSet Query(String sqlSentence) {  //²éÑ¯,´«ÈëÌØ¶¨µÄsql selectÓï¾ä,·µ»Øresultset½á¹û¼¯
         Statement stat;
         ResultSet rs= null;
         try{
-            stat = conn.createStatement(); //è·å–æ‰§è¡Œsqlè¯­å¥çš„å¯¹è±¡
-            rs= stat.executeQuery(sqlSentence); //æ‰§è¡ŒsqlæŸ¥è¯¢ï¼Œè¿”å›ç»“æœé›†
+            stat = conn.createStatement(); //»ñÈ¡Ö´ĞĞsqlÓï¾äµÄ¶ÔÏó
+            rs= stat.executeQuery(sqlSentence); //Ö´ĞĞsql²éÑ¯£¬·µ»Ø½á¹û¼¯
         } catch(Exception e) {
-            System.out.println(e.getMessage()); //è¾“å‡ºé”™è¯¯ä¿¡æ¯
+            System.out.println(e.getMessage()); //Êä³ö´íÎóĞÅÏ¢
         }
         return rs;
     }
-    public static boolean QueryExisted(String userName) throws SQLException {  //æŸ¥è¯¢æ³¨å†Œç”¨æˆ·åæ˜¯å¦å·²ç»å­˜åœ¨,è¿”å›trueæˆ–è€…false
+    public static boolean QueryExisted(String userName) throws SQLException {  //²éÑ¯×¢²áÓÃ»§ÃûÊÇ·ñÒÑ¾­´æÔÚ,·µ»Øtrue»òÕßfalse
         Statement stat;
         ResultSet rs= null;
         try{
-            stat = conn.createStatement(); //è·å–æ‰§è¡Œsqlè¯­å¥çš„å¯¹è±¡
-            rs= stat.executeQuery("select userName from user where userName = '"+userName+"';"); //æ‰§è¡ŒsqlæŸ¥è¯¢ï¼Œè¿”å›ç»“æœé›†
+            stat = conn.createStatement(); //»ñÈ¡Ö´ĞĞsqlÓï¾äµÄ¶ÔÏó
+            rs= stat.executeQuery("select userName from user where userName = '"+userName+"';"); //Ö´ĞĞsql²éÑ¯£¬·µ»Ø½á¹û¼¯
         } catch(Exception e) {
-            System.out.println(e.getMessage()); //è¾“å‡ºé”™è¯¯ä¿¡æ¯
+            System.out.println(e.getMessage()); //Êä³ö´íÎóĞÅÏ¢
         }
-        if(rs.next()) //ç»“æœé›†ä¸ä¸ºç©º,è¯´æ˜å­˜åœ¨ç”¨æˆ·å,é€»è¾‘ä¸Šè¿˜æœ‰äº›é—®é¢˜
+        if(rs.next()) //½á¹û¼¯²»Îª¿Õ,ËµÃ÷´æÔÚÓÃ»§Ãû,Âß¼­ÉÏ»¹ÓĞĞ©ÎÊÌâ
             return true;
         else
             return false;
     }
-    public static int Insert(String sqlSentence) {  //æ’å…¥,åŒæ ·ä¼ å…¥sql insertè¯­å¥,å°†æ•°æ®æ’å…¥ç‰¹å®šçš„è¡¨æ ¼
+    public static int Insert(String sqlSentence) {  //²åÈë,Í¬Ñù´«Èësql insertÓï¾ä,½«Êı¾İ²åÈëÌØ¶¨µÄ±í¸ñ
         Statement stat;
         int insertResult= 0;
         try{
-            stat = conn.createStatement(); //è·å–æ‰§è¡Œsqlè¯­å¥çš„å¯¹è±¡
-            insertResult= stat.executeUpdate(sqlSentence); //æ‰§è¡ŒsqlæŸ¥è¯¢,æ’å…¥çš„å…ƒç»„æ•°ç›®
+            stat = conn.createStatement(); //»ñÈ¡Ö´ĞĞsqlÓï¾äµÄ¶ÔÏó
+            insertResult= stat.executeUpdate(sqlSentence); //Ö´ĞĞsql²éÑ¯,²åÈëµÄÔª×éÊıÄ¿
         } catch(Exception e) {
             System.out.println(e.getMessage());
         }
         return insertResult;
     }
-    public static int Delete(String sqlSentence) {  //æ’å…¥,åŒæ ·ä¼ å…¥sql insertè¯­å¥,å°†æ•°æ®æ’å…¥ç‰¹å®šçš„è¡¨æ ¼
+    public static int Delete(String sqlSentence) {  //²åÈë,Í¬Ñù´«Èësql insertÓï¾ä,½«Êı¾İ²åÈëÌØ¶¨µÄ±í¸ñ
         Statement stat;
         int deleteResult= 0;
         try{
-            stat = conn.createStatement(); //è·å–æ‰§è¡Œsqlè¯­å¥çš„å¯¹è±¡
-            deleteResult= stat.executeUpdate(sqlSentence); //æ‰§è¡ŒsqlæŸ¥è¯¢,æ’å…¥çš„å…ƒç»„æ•°ç›®
+            stat = conn.createStatement(); //»ñÈ¡Ö´ĞĞsqlÓï¾äµÄ¶ÔÏó
+            deleteResult= stat.executeUpdate(sqlSentence); //Ö´ĞĞsql²éÑ¯,²åÈëµÄÔª×éÊıÄ¿
         } catch(Exception e) {
             System.out.println(e.getMessage());
         }
         return deleteResult;
     }
-    public static int Update(String sqlSentence) {  //æ’å…¥,åŒæ ·ä¼ å…¥sql insertè¯­å¥,å°†æ•°æ®æ’å…¥ç‰¹å®šçš„è¡¨æ ¼
+    public static int Update(String sqlSentence) {  //²åÈë,Í¬Ñù´«Èësql insertÓï¾ä,½«Êı¾İ²åÈëÌØ¶¨µÄ±í¸ñ
         Statement stat;
         int updateResult= 0;
         try{
-            stat = conn.createStatement(); //è·å–æ‰§è¡Œsqlè¯­å¥çš„å¯¹è±¡
-            updateResult= stat.executeUpdate(sqlSentence); //æ‰§è¡ŒsqlæŸ¥è¯¢,æ’å…¥çš„å…ƒç»„æ•°ç›®
+            stat = conn.createStatement(); //»ñÈ¡Ö´ĞĞsqlÓï¾äµÄ¶ÔÏó
+            updateResult= stat.executeUpdate(sqlSentence); //Ö´ĞĞsql²éÑ¯,²åÈëµÄÔª×éÊıÄ¿
         } catch(Exception e) {
             System.out.println(e.getMessage());
         }

@@ -10,6 +10,7 @@
         android:layout_height="wrap_content"
         android:text="赶快来加入我们吧"
         android:textColor="#ffffff"
+        android:background="@drawable/page3_shape"
         android:textSize="20sp"
         android:layout_marginTop="45dp"
         android:id="@+id/te"
@@ -60,6 +61,6 @@
         android:layout_height="wrap_content"
         android:src="@mipmap/page4"
         android:id="@+id/imageView2"
-        android:layout_above="@+id/linearLayout3"
+        android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
 </RelativeLayout>

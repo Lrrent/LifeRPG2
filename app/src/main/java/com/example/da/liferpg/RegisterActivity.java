@@ -3,16 +3,20 @@ package com.example.da.liferpg;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.CardView;
 import android.transition.Transition;
 import android.transition.TransitionInflater;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.animation.AccelerateInterpolator;
@@ -72,6 +76,16 @@ public class RegisterActivity extends Activity {
             new DBAsyncTask().execute(name,password);
         }
     }
+    public boolean checkNetwork(){ //检查是否有网络
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        if (networkInfo != null && networkInfo.isConnected()){ //找到网络并且网络可连接
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
     //新建线程,访问数据库,
     class DBAsyncTask extends AsyncTask<String,Integer,String>{
         @Override
@@ -82,14 +96,18 @@ public class RegisterActivity extends Activity {
             database.connect();
             try {
                // Log.i(name, "doInBackground: ");
-                boolean isExisted = database.QueryExisted(name);  //判断用户名是否已经存在
-                if (isExisted){ //用户名已经存在
+                if (!checkNetwork()) { //网络不可用
+                    return "noNetwork";
+                }
+                else if (database.QueryExisted(name)){ //用户名已经存在
                     return "existed";
                 }
                 else{ //可以注册,将用户名和密码数据插入user表格中,然后通知UI可以登录
                     String sql = "INSERT INTO `user` (`userId`, `userName`, `userPassword`) VALUES (NULL, '"+name+"', '"+password+"');";
-                    String rankingSql = "INSERT INTO `ranking` (`userName`, `completeRateDaily`, `completeRateDDL`) VALUES ('"+name+"',0,0);";
-                    Log.i(rankingSql, "doInBackground: ");
+                    String rankingSql = "INSERT INTO `ranking` VALUES ('"+name+"',0,0,0,0,0);";
+                   // Log.i(rankingSql, "doInBackground: ");
+                    SharedPreferences sharedPreferences = getSharedPreferences("user",MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
                     database.Insert(sql);
                     database.Insert(rankingSql);
                     return "register";
@@ -101,8 +119,15 @@ public class RegisterActivity extends Activity {
         }
         @Override
         protected void onPostExecute(String s) { //对控件进行处理
-            Log.i(s, "onPostExecute: ");
-            if (s.equals("existed")){
+           // Log.i(s, "onPostExecute: ");
+            if (s.equals("noNetwork")){
+                Snackbar.make(userName,"网络不可用",1000).setAction("重试", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                    }
+                }).show();
+            }
+            else if (s.equals("existed")){
                 Toast.makeText(getApplicationContext(),"用户名已经存在",Toast.LENGTH_LONG).show();
             }
             else if (s.equals("register")){ //注册成功,跳转回登陆界面

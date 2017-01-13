@@ -1,13 +1,17 @@
 package com.example.da.liferpg;
 
 import android.app.ActivityOptions;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
@@ -21,6 +25,7 @@ import com.example.da.liferpg.database.DataBase;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Calendar;
 
 
 public class LoginActivity extends AppCompatActivity {
@@ -47,6 +52,16 @@ public class LoginActivity extends AppCompatActivity {
         userName = (EditText) findViewById(R.id.et_username);
         userPassword = (EditText) findViewById(R.id.et_password);
     }
+    public boolean checkNetwork(){
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        if (networkInfo != null && networkInfo.isConnected()){ //找到网络并且网络可连接
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
     class DBAsyncTask extends AsyncTask<String,Integer,String>{  //访问外部数据库涉及联网,所以必须在另一个线程中执行
         @Override
         protected String doInBackground(String... params) {
@@ -56,8 +71,10 @@ public class LoginActivity extends AppCompatActivity {
             dataBase.connect();
             /*-------------------- 检查账号和密码是否正确------------------------*/
             try {
-                boolean exited = dataBase.QueryExisted(name);
-                if (!exited){   //不存在用户名
+                if (!checkNetwork()) { //网络不可用
+                    return "noNetwork";
+                }
+                else if (!dataBase.QueryExisted(name)){   //不存在用户名
                     return "notExited";
                 }
                 else{
@@ -84,7 +101,14 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             //super.onPostExecute(s);
-            if (s.equals("notExited")){ //用户名不存在
+            if (s.equals("noNetwork")){ //没有网络的情况
+                Snackbar.make(userName,"网络不可用",1000).setAction("重试", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                    }
+                }).show();
+            }
+            else if (s.equals("notExited")){ //用户名不存在
                 Toast.makeText(getApplicationContext(),"用户不存在",Toast.LENGTH_LONG).show();
 
                // SnackbarUtil.LongSnackbar(userName,"用户名不存在",0xff2195f3,0xffffffff).show();
@@ -94,11 +118,13 @@ public class LoginActivity extends AppCompatActivity {
             }
             else if (s.split(",")[0].equals("logined")){ //允许登陆
                 LoginedJudg = getSharedPreferences("user",MODE_PRIVATE);  //可以登录之后想sharepreference中写入数据,下次就不需要再登陆
+                String curDate = getCurDate();
                 SharedPreferences.Editor editor = LoginedJudg.edit();
                 String loginFlag = "logined";
                 editor.putString("logined",loginFlag);
                 editor.putString("userName",s.split(",")[1]);
                 editor.putString("userPassword",s.split(",")[2]);
+                editor.putString("lastLogin",curDate);
                 editor.commit();
                 Explode explode = new Explode();
                 explode.setDuration(500);
@@ -109,6 +135,15 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(i2, oc2.toBundle());
             }
         }
+    }
+    private String getCurDate(){
+        String curTime = new String();
+        final Calendar c = Calendar.getInstance();
+        String year = c.get(Calendar.YEAR)+"-";
+        String month = (c.get(Calendar.MONTH)+1)+"-";
+        String day = c.get(Calendar.DAY_OF_MONTH)+"";
+        curTime = year+month+day;
+        return curTime;
     }
     class myClickListener implements View.OnClickListener {   //按钮的监听事件
         @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)

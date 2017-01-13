@@ -5,8 +5,9 @@
     android:layout_height="match_parent">
         <com.example.da.liferpg.noScrollListView
             android:id="@+id/habit_list"
-            android:layout_width="match_parent"
+            android:layout_width="fill_parent"
             android:layout_height="fill_parent"
+            android:footerDividersEnabled="true"
             android:nestedScrollingEnabled="false">
         </com.example.da.liferpg.noScrollListView>
 </android.support.v4.widget.NestedScrollView>
